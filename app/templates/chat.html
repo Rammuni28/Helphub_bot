@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HelpHub Chatbot</title>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.min.js"></script>
+</head>
+<body>
+  <div id="chat-log"></div>
+  <input id="input" autocomplete="off"/><button id="send">Send</button>
+  <script>
+    const socket = io();
+    const chatLog = document.getElementById("chat-log");
+    let lastQuestion = "";
+
+    document.getElementById("send").onclick = () => {
+      const msg = document.getElementById("input").value;
+      if (!msg) return;
+      lastQuestion = msg;
+      chatLog.innerHTML += `<p><b>You:</b> ${msg}</p>`;
+      socket.emit("user_message", {message: msg});
+      document.getElementById("input").value = "";
+    };
+
+    socket.on("bot_response", data => {
+      chatLog.innerHTML += `<p><b>Bot:</b> ${data.message}</p>
+        <button class="rate" data-rating="1">👍</button>
+        <button class="rate" data-rating="0">👎</button>`;
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+
+    chatLog.addEventListener("click", e => {
+      if (e.target.classList.contains("rate")) {
+        const rating = e.target.dataset.rating;
+        socket.emit("user_rating", {question: lastQuestion, rating: rating});
+        e.target.disabled = true;
+      }
+    });
+  </script>
+</body>
+</html>
