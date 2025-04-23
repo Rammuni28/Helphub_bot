@@ -1,2 +1,78 @@
-# Helphub_bot
- Helphub_bot for vahan ai
+# 🧠 HelpHub-Bot
+
+An AI chatbot for the fictional SaaS product **HelpHub**, powered by Hugging Face's LLMs and semantic search using FAISS. It understands your questions based on Markdown files and gives smart answers in real-time.
+
+---
+
+## 🚀 Features
+
+- ⚡️ Instant search over Markdown knowledge base with FAISS
+- 💬 Context-aware Q&A using HuggingFace's LLM API
+- 🧠 Remembers previous messages for fluid conversations
+- ❓ Smart fallback if it doesn't know the answer
+- 📊 Logs Q&A + feedback in SQLite (👍 / 👎)
+- 🖥️ Clean web chat interface with SocketIO
+
+---
+
+## 🏗️ Project Structure
+helphub-bot/
+├── app/
+│ ├── app.py # Flask app with WebSocket
+│ ├── chain.py # FAISS + LLM setup
+│ ├── indexer.py # Markdown to FAISS index
+│ ├── prompts.py #Prompt used to generate the answer from retrieved docs
+│ └── templates/
+│ └── chat.html # Chat frontend
+├── kb/ # Markdown knowledge base files
+├── faiss_index/ # Vector index (auto-generated)
+├── analytics/ # User feedback logs (auto-generated)
+├── Dockerfile
+├── requirements.txt
+└── README.md
+
+
+---
+
+## 🧪 How to Run (2-Step Docker)
+
+```bash
+docker build -t helphub-bot .
+docker run -p 5000:5000 -e HUGGINGFACEHUB_API_TOKEN=<your-hf-token-here> helphub-bot
+
+Then open 👉 http://localhost:5000
+
+Local Dev Setup
+bash
+
+git clone https://github.com/your-username/helphub-bot
+cd helphub-bot
+python3 -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+
+# Set your HuggingFace token
+export HUGGINGFACEHUB_API_TOKEN=<your-hf-token-here>
+
+# Build the index and start app
+python app/indexer.py
+python -m app.app
+
+📖 Documentation
+	•	Inline docs: All modules (app/app.py, app/chain.py, app/indexer.py) include doc-strings and comments to explain key logic.
+	•	Knowledge Base: Browse kb/*.md for product concept, features, pricing, use cases, FAQs, troubleshooting, security, analytics, and developer guides.
+	•	API Endpoints:
+	•	GET / → Chat UI
+	•	WebSocket user_message → ask question
+	•	WebSocket user_rating → submit rating
+	•	GET /analytics → JSON summary of total questions, satisfaction scores, and question-type breakdown.
+
+
+📊 Analytics
+
+    Feedback gets stored in analytics/feedback.db
+
+    Visit /analytics to view basic stats in JSON
+
+📄 License
+
+This project is for demo and educational purposes. Feel free to adapt and extend it!
