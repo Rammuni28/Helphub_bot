@@ -36,7 +36,7 @@ helphub-bot/
 
 ## 🧪 How to Run (2-Step Docker)
 
-```bash
+
 docker build -t helphub-bot .
 docker run -p 5000:5000 -e HUGGINGFACEHUB_API_TOKEN=<your-hf-token-here> helphub-bot
 
@@ -67,11 +67,6 @@ python -m app.app
 	•	GET /analytics → JSON summary of total questions, satisfaction scores, and question-type breakdown.
 
 
-📊 Analytics
-
-    Feedback gets stored in analytics/feedback.db
-
-    Visit /analytics to view basic stats in JSON
 
 📄 License
 
